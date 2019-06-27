@@ -1,0 +1,89 @@
+
+<!doctype html>
+<html lang="en-us">
+
+<!-- Mirrored from crlt.co/POST by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 27 Jun 2019 21:11:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<title>crlt.co &bull; redirecting&hellip;</title>
+	<link rel="stylesheet" type="text/css" href="assets/shortlink.css"/>
+	<link rel="icon" href="assets/brand.png"/>
+	<script type="text/javascript" src="../verifypow.com/lib/verify.js"></script>
+	<meta name="viewport" content="width=400"/>
+</head>
+<body>
+
+<div class="content">
+	<h1>Making sure you're not a bot!<br>Proof of work Required</h1>
+	<h2>Redirecting shortly...</h2>
+
+	<div class="progress-bar">
+		<div id="progress"></div>
+	</div>
+
+	<div id="blk-warning" class="warn" style="display: none">
+		Library failed to load. <strong>Please disable adblock!</strong>
+	</div>
+	<div align="center" style="margin-top:100px;">
+	powered by<br><a href="https://crypto-loot.org/">
+		<img src="assets/brand.png" style="max-width: 100px;" />
+	</a></div>
+</div>
+
+<script type="text/javascript">
+	if (!window.CRLT) {
+		document.getElementById('blk-warning').style.display = 'block';
+	}
+
+	var $progress = document.getElementById('progress');
+	var target = ;
+	var totalHashes = 0;
+	var updateInterval = null;
+
+	var miner = new CRLT.Token('', target,
+        { threads:8, }
+        );
+	miner.on('accepted', function(params){
+		if (miner.totalhashes >= target) { //miner.totalhashes rather than params.hashes
+			clearInterval(updateInterval);
+			$progress.style.width = '100%';
+
+			var ts = Date.now();
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === xhr.DONE){
+					var now = Date.now();
+					var url = JSON.parse(xhr.responseText).url;
+          var status = JSON.parse(xhr.responseText).status;
+					if (now-ts < 200 || url == null || status == "false") {
+						var wait = 275 - (now-ts);
+            if(url != null || status != "false"){
+					  	setTimeout(function(){window.location.href = url;}, wait);
+            }
+					}
+					else {
+            if(url != null || status != "false"){
+						  window.location.href = url;
+            }
+					}
+				}
+			};
+
+			xhr.open('POST.html', 'POST');
+			xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			xhr.send('q=&sitekey=&token='+encodeURIComponent(miner.getToken()));
+		}
+	});
+
+	updateInterval = setInterval(function(){
+		var p = miner.getTotalHashes(true) / target;
+		var progress = (p*p)/(p*p + 0.2) + 0.01;
+		$progress.style.width = (Math.ceil(progress*1000)/10)+'%';
+	}, 250);
+	miner.start(CRLT.FORCE_MULTI_TAB);
+</script>
+<!-- /POST -->
+</body>
+
+<!-- Mirrored from crlt.co/POST by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 27 Jun 2019 21:11:56 GMT -->
+</html>
